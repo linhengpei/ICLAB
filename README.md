@@ -1,7 +1,7 @@
 # IClab
 2023FALL iclab 
-Rank :
-|Name |Quantity|
+
+|Lab |Rank|
 |-----|--------|
-|Apple|3       |
-|Egg  |12      |
+|Lab01|26       |
+|Lab02|         |
