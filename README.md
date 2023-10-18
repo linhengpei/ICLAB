@@ -5,5 +5,5 @@
 |-----|------|
 |Lab01|  26  |
 |Lab02|  2   |
-|Lab03|  X   | (NO performance)
+|Lab03|  X   |# (NO performance)
 |Lab04|  27  |
