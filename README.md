@@ -1,12 +1,13 @@
 # IClab
-2023FALL iclab 
+# **2023FALL **
 
-|Lab |Rank|
-|-----|------|
-|Lab01|  26  |
-|Lab02|  2   |
-|Lab03|  X   | (NO performance score)
-|Lab04|  27  |
+
+| Lab | Rank | score |
+|-----|------|-------|
+|Lab01|  26  | 94.97 |
+|Lab02|  2   | 99.78 |
+|Lab03|  X   |  100  |
+|Lab04|  27  | 93.55 |
 |Lab05|      |
 |Lab06|      |
 |Lab07|      |
@@ -15,3 +16,7 @@
 |Lab10|      |
 |Lab11|      |
 |Lab12|      |
+
+Lab03 no design performance score
+
+
