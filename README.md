@@ -18,9 +18,9 @@
 |Midterm Project|
 |Final   Project|
 
-Lab03 no design performance score \n
-Lab07    5%     performance score \n
-Lab08   20%     performance score \n
+Lab03 no design performance score <br/>
+Lab07    5%     performance score <br/>
+Lab08   20%     performance score <br/>
 
 pdf : iloveiclab
 
