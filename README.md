@@ -15,6 +15,8 @@
 |Lab10|      |
 |Lab11|      |
 |Lab12|      |
+|Midterm Project|
+|Final   Project|
 
 Lab03 no design performance score
 
