@@ -19,6 +19,8 @@
 |Final   Project|
 
 Lab03 no design performance score
+Lab07    5%     performance score
+Lab08   20%     performance score
 
 pdf : iloveiclab
 
