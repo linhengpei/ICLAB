@@ -25,7 +25,7 @@ Lab08   20%     performance score <br/>
 Lab10   10%     performance score <br/>
 Lab11 no design performance score <br/>
 Lab13 no design performance score <br/>
-* : Best Code
+\* : Best Code
 
 pdf : iloveiclab
 
