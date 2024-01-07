@@ -14,7 +14,7 @@
 |Lab09|  *1  | 100   |
 |Lab10|  15  | 98.83 |
 |Lab11|  X   | 100   |
-|Lab12|      |       |
+|Lab12|  5   | 98.54 |
 |Lab13|  X   | 100   |
 |Midterm Project|   34  |  91.24 |
 |Final   Project|       |        |
