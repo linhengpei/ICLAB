@@ -69,8 +69,8 @@ parameter ID_WIDTH = 4 , ADDR_WIDTH = 32, DATA_WIDTH = 16, DRAM_NUMBER=2, WRIT_N
 
 // axi write address channel
 output  wire [WRIT_NUMBER * ID_WIDTH-1:0]        awid_m_inf;
-output  wire [WRIT_NUMBER * ADDR_WIDTH-1:0]    awaddr_m_inf;
-output  reg [WRIT_NUMBER * 7 -1:0]             awlen_m_inf;
+output  reg [WRIT_NUMBER * ADDR_WIDTH-1:0]    awaddr_m_inf;
+output  wire [WRIT_NUMBER * 7 -1:0]             awlen_m_inf;
 output  wire [WRIT_NUMBER * 3 -1:0]            awsize_m_inf;
 output  wire [WRIT_NUMBER * 2 -1:0]           awburst_m_inf;
 output  reg  [WRIT_NUMBER-1:0]                awvalid_m_inf;
@@ -698,6 +698,7 @@ always@(posedge clk or negedge rst_n) begin
             end
 
             Write_back : begin // 8
+                awaddr_m_inf <= {20'd1 , load_address , 1'b0};
                 if(opcode[1]) begin  // Load Store
                     if(opcode[0]) begin  // Store
                         D_web <= 0; //Write
@@ -737,7 +738,7 @@ always@(posedge clk or negedge rst_n) begin
                         endcase
                     end
                 end
-
+                /*
                 if(inst_cnt == 9 ) begin
                     inst_cnt <= 0;
                 end
@@ -752,18 +753,26 @@ always@(posedge clk or negedge rst_n) begin
                     IO_stall <= 0;
                     c_state <= Check_Inst;
                 end
+                */
+                if( store_flag ) begin
+                    c_state <= Write_Dram;
+                end
+                else begin
+                    IO_stall <= 0;
+                    c_state <= Check_Inst;
+                end
             end
             Write_Dram : begin // 9
                 D_web <= 1; // Read
 
                 write_data <= 1 ;
 
-                if(wready_m_inf || awvalid_m_inf || awready_m_inf ) begin
-                    D_sram_addr <= D_sram_addr + 1;
-                end
-                else if (!wvalid_m_inf) begin
-                    D_sram_addr <= min[7:0] ;
-                end
+                // if(wready_m_inf || awvalid_m_inf || awready_m_inf ) begin
+                //      D_sram_addr <= D_sram_addr + 1;
+                //   end
+                //   else if (!wvalid_m_inf) begin
+                //D_sram_addr <= min[7:0] ;
+                //    end
 
                 if(bvalid_m_inf) begin
                     write_data <= 0 ;
@@ -775,7 +784,7 @@ always@(posedge clk or negedge rst_n) begin
         endcase
     end
 end
-
+/*
 always@(posedge clk or negedge rst_n) begin
     if(!rst_n) begin
         min <= 11'h7FF;
@@ -789,13 +798,14 @@ always@(posedge clk or negedge rst_n) begin
         if(load_address < min ) begin
             min <= load_address ;
         end
-
+ 
         if( load_address > max ) begin
             max <= load_address;
         end
     end
 end
-
+*/
+/*
 reg [1:0]data_state_w;
 reg [15:0] temp1 , temp2 , temp3;
 assign awaddr_m_inf = {20'd1 , min , 1'b0};
@@ -804,13 +814,13 @@ always@(posedge clk or negedge rst_n) begin  // Write data block
     if(!rst_n) begin
         awlen_m_inf <= 0;
         awvalid_m_inf <= 0;
-
+ 
         wvalid_m_inf <= 0;
         wdata_m_inf <= 0;
         wlast_m_inf <= 0;
-
+ 
         bready_m_inf  <= 0;
-
+ 
         out_cnt <= 0 ;
         temp1 <= 0;
         temp2 <= 0;
@@ -867,19 +877,64 @@ always@(posedge clk or negedge rst_n) begin  // Write data block
                             default:
                                 wdata_m_inf <= D_out_buff;
                         endcase
-
+ 
                         if(out_cnt == awlen_m_inf -  1) begin
                             wlast_m_inf  <= 1;
                         end
                     end
                 end
-
+ 
                 temp3 <= D_out_buff;
             end
         endcase
     end
 end
+*/
 
+reg data_state_w;
+//assign awaddr_m_inf = {20'd1 , PC[11:9] , D_sram_addr , 1'b0};
+assign awlen_m_inf = 0;
+always@(posedge clk or negedge rst_n) begin  // Write data block
+    if(!rst_n) begin
+        awvalid_m_inf <= 0;
+
+        wvalid_m_inf <= 0;
+        wdata_m_inf <= 0;
+        wlast_m_inf <= 0;
+
+        bready_m_inf  <= 0;
+        data_state_w <= 0;
+    end
+    else begin
+        case(data_state_w)
+            0: begin
+                if(write_data && !awready_m_inf ) begin
+                    awvalid_m_inf <= 1;
+                end
+                else begin
+                    awvalid_m_inf <= 0;
+                    if(awready_m_inf) begin
+                        wdata_m_inf <= D_out_buff;
+                        wlast_m_inf <= 1;
+                        wvalid_m_inf  <= 1;
+                        data_state_w <= 1;
+                    end
+                end
+            end
+            1: begin
+                if(bvalid_m_inf) begin
+                    bready_m_inf <= 0;
+                    data_state_w <= 0;
+                end
+                else if(wready_m_inf) begin
+                    wlast_m_inf <= 0;
+                    wvalid_m_inf <= 0;
+                    bready_m_inf <= 1;
+                end
+            end
+        endcase
+    end
+end
 assign  araddr_m_inf[63:32] = {20'd1 , I_dram_addr , 8'b0} ;
 assign  araddr_m_inf[31: 0] = {20'd1 , D_dram_addr , 8'b0} ;
 
@@ -951,7 +1006,7 @@ always@(posedge clk or negedge rst_n) begin  // Read data block
     end
 end
 
-endmodule  // 3.4_ 220005.446001 two stage Mult 34076
+endmodule  // 3.4_ 
 
 
 
