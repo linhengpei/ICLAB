@@ -17,7 +17,7 @@
 |Lab12|  5   | 98.54 |
 |Lab13|  X   | 100   |
 |Midterm Project|   34  |  91.24 |
-|Final   Project|       |        |
+|Final   Project|   8   |  98.19 | 
 
 Lab03 no design performance score <br/>
 Lab07    5%     performance score <br/>
